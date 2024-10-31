@@ -1,0 +1,20 @@
+---
+- name: Create borg-log config
+  ansible.builtin.template:
+    src: borg.j2
+    dest: /etc/logrotate.d/borg
+- name: Create repository borg
+  ansible.builtin.template:
+    src: addborgrep.j2
+    dest: /home/borg/addborgrep.sh
+    owner: borg
+    group: borg
+    mode: '0755'
+- name: Create script run borg
+  ansible.builtin.template:
+    src: borgbkp.j2
+    dest: /home/borg/borgbkp.sh
+    owner: borg
+    group: borg
+    mode: '0755'
+...

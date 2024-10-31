@@ -1,0 +1,11 @@
+---
+- name: Install Client pkg
+  hosts: client
+  gather_facts: true
+  become: true
+  roles:
+   - role: install_client_pkg
+   - role: install_client_folders
+   - role: install_client_config
+   - role: add_client_cronjob
+...

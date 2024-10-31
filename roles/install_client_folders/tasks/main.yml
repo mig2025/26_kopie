@@ -1,0 +1,43 @@
+---
+- name: Create Borg user
+  ansible.builtin.user:
+    name: borg
+    shell: /bin/bash
+    create_home: true
+- name: Create .ssh directory
+  ansible.builtin.file:
+    path: /home/borg/.ssh
+    owner: borg
+    group: borg
+    state: directory
+    mode: '0700'
+- name: generate ssh-key
+  command: ssh-keygen -q -t rsa -f /home/borg/.ssh/id_rsa -C "" -N ""
+  args:
+    creates: /home/borg/.ssh/id_rsa
+- name: add Borg access
+  command: chown -R borg:borg /home/borg/.ssh/
+- name: Copie public ssh-key
+  ansible.builtin.fetch:
+    src: /home/borg/.ssh/id_rsa.pub
+    dest: ~/26_kopie/roles/install_server_folder/files/
+- name: Create log directory
+  ansible.builtin.file:
+    path: /var/log/borg
+    owner: borg
+    group: borg
+    state: directory
+    mode: '0700'
+- name: Create directory backup
+  ansible.builtin.file:
+    path: /var/backup
+    owner: borg
+    group: borg
+    state: directory
+    mode: '0644'
+- name: Create Filesysem
+  ansible.builtin.filesystem:
+    fstype: ext4
+    dev: /dev/sdc
+    uuid: random
+...

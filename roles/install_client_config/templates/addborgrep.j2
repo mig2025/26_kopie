@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export BORG_PASSPHRASE="789999"
+
+borg init --encryption=repokey borg@192.168.56.160:/var/backup/
+exit 0

@@ -1,0 +1,10 @@
+---
+- name: Install Server pkg
+  hosts: backup
+  gather_facts: true
+  become: true
+  roles:
+   - role: install_server_pkg
+   - role: install_server_folder
+   - role: server_configs
+...

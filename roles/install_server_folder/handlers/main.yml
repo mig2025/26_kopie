@@ -1,0 +1,4 @@
+---
+- name: Delete lost+found
+  command: rm -R /var/backup/lost+found
+...

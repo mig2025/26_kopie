@@ -1,0 +1,12 @@
+---
+- name: Delete sshd_config
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config
+    state: absent
+- name: Add sshd_config
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+  notify:
+   - restart sshd
+...

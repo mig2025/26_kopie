@@ -1,0 +1,13 @@
+#!/bin/bash
+backup_log="/var/log/borg/borg.log"
+datum=$(date -d now)
+export BORG_PASSPHRASE="789999"
+
+exec &>> $backup_log
+
+echo "Запуск задания резервного копирования $datum:" 1>> $backup_log
+
+borg create --stats --list borg@192.168.56.160:/var/backup/::"etcbkp-{now:%Y-%m-%d_%H:%M:%S}" /etc 2>> $backup_log
+borg prune --list --keep-daily 90 --keep-monthly 12 --keep-yearly 1 borg@192.168.56.160:/var/backup/ 2>> $backup_log
+
+echo \n"Звершение задания резервного копирования $datum:" 1>> $backup_log

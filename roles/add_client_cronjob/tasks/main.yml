@@ -1,0 +1,36 @@
+---
+- name: Disable StrictHostKeyChecking
+  ansible.builtin.template:
+    src: config.j2
+    dest: /home/borg/.ssh/config
+    owner: borg
+    group: borg
+    mode: '0400'
+- name: delete crontab
+  ansible.builtin.file:
+    path: /etc/crontab
+    state: absent
+- name: add crontab
+  ansible.builtin.template:
+    src: crontab.j2
+    dest: /etc/crontab
+    owner: root
+- name: Ctron-job root user
+  ansible.builtin.cron:
+    name: Starte logratation
+    minute: "*/3"
+    hour: "*"
+    month: "*"
+    weekday: "*"
+    user: root
+    job: logrotate -f /etc/logrotate.d/borg
+- name: Cron-job user borg
+  ansible.builtin.cron:
+    name: Starte script
+    minute: "*/5"
+    hour: "*"
+    month: "*"
+    weekday: "*"
+    user: borg
+    job: /home/borg/borgbkp.sh
+...
